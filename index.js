@@ -27,7 +27,7 @@ const insertData = (vdata, day, yield) => {
   };
   if (yield !== undefined) {
     db.query(
-      `INSERT INTO dw_biu (title,subTitle,sancha,totalMinYield,totalMaxYield,issueDate,day,dataCount,yield,milkCell,fat,Protein,MSNF,MUN) VALUES ('${vdata.title}','${vdata.subTitle}',${vdata.sancha},${vdata.totalMinYield},${vdata.totalMaxYield},NOW(),${day},${vdata.dataCount},${yield},${vdata.milkCell},${vdata.fat},${vdata.Protein},${vdata.MSNF},${vdata.MUN})`,
+      `INSERT INTO dw_biu (title,subTitle,sancha,calc,totalMinYield,totalMaxYield,issueDate,day,dataCount,yield,milkCell,fat,Protein,MSNF,MUN) VALUES ('${vdata.title}','${vdata.subTitle}',${vdata.sancha},'Y',${vdata.totalMinYield},${vdata.totalMaxYield},NOW(),${day},${vdata.dataCount},${yield},${vdata.milkCell},${vdata.fat},${vdata.Protein},${vdata.MSNF},${vdata.MUN})`,
       (err, result) => {
         if (err) throw err;
         console.log('Data added to database');
@@ -50,9 +50,10 @@ const getBiuData = () => {
       let befYield = 0;
       for (let i = 0; i < data.length; i++) {
         if (data[i].day === 5) {
-          const oneDayYield = data[i].yield / 5;
+          let oneDayYield = (data[i + 1].yield - data[i].yield) / 10;
+
           for (let j = 1; j < 5; j++) {
-            const yield = oneDayYield * j;
+            const yield = data[i].yield - oneDayYield * (5 - j);
             insertData(data[i], j, yield);
           }
         } else {
@@ -77,3 +78,4 @@ db.connect((err) => {
   console.log('Connected to database  ');
   getBiuData();
 });
+
