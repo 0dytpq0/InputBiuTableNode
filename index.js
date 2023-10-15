@@ -14,8 +14,8 @@ try {
     acquireTimeout: 10000,
     host: '127.0.0.1',
     user: 'root',
-    password: 'ekdnsel',
-    database: 'dawoon',
+    password: '',
+    database: '',
   });
 } catch (error) {
   console.log(error);
